@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>GFCSU | Screening Scorecard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --amex-blue:#0066BE;
+    --amex-dark:#0066BE;
+
+    --bg:#F2F2F2;
+    --card:#FFFFFF;
+
+    --text:#0066BE;
+    --muted:#545759;
+    --footer:#8D9092;
+
+    --border:#DCE7F3;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
+    font-family:'Inter',sans-serif;
+    color:var(--text);
+
+    background-image:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.700) 0%,
+            rgba(242, 242, 242, 0.400) 100%
+        ),
+        url("https://whitejuno.github.io/Assets/amex_gray_bg.png");
+
+    background-size:
+        cover,
+        cover;
+
+    background-position:
+        center center,
+        center center;
+
+    background-repeat:
+        no-repeat,
+        no-repeat;
+
+    background-attachment:
+        fixed;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes fadeOut{
+    from{
+        opacity:1;
+        transform:translateY(0);
+    }
+    to{
+        opacity:0;
+        transform:translateY(20px);
+    }
+}
+
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero-screen{
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    padding:40px;
+    position:relative;
+
+    animation:fadeUp 1s ease;
+}
+
+.hero{
+    width:min(720px,100%);
+    text-align:center;
+}
+
+.hero h1{
+    font-size:clamp(2.8rem,6vw,4.7rem);
+    font-weight:700;
+
+    color:var(--amex-blue);
+
+    letter-spacing:-0.04em;
+
+    opacity:0;
+    animation:fadeUp .9s ease forwards;
+}
+
+.hero p{
+    margin-top:18px;
+
+    font-size:1.1rem;
+    color:var(--muted);
+
+    opacity:0;
+    animation:fadeUp .9s ease .18s forwards;
+}
+
+.button-group{
+    margin-top:48px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:18px;
+}
+
+.dashboard-btn{
+    width:80%;
+
+    padding:24px 28px;
+
+    border:none;
+    border-radius:28px;
+
+    background:white;
+    border:1px solid var(--border);
+
+    font-size:1.05rem;
+    font-weight:600;
+
+    cursor:pointer;
+
+    color:var(--amex-blue);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease,
+        opacity .25s ease;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.04),
+        0 20px 50px rgba(0,102,190,.06);
+
+    opacity:0;
+}
+
+.dashboard-btn:nth-child(1){
+    animation:fadeUp .8s ease .35s forwards;
+}
+
+.dashboard-btn:nth-child(2){
+    animation:fadeUp .8s ease .5s forwards;
+}
+
+.dashboard-btn:hover{
+    transform:
+        translateY(-4px)
+        scale(1.01);
+
+    border-color:
+        rgba(0,102,190,.25);
+
+    box-shadow:
+        0 18px 45px rgba(0,102,190,.12);
+}
+
+.dashboard-btn:active{
+    transform:scale(.985);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    position:absolute;
+
+    bottom:20px;
+    left:0;
+    right:0;
+
+    width:100%;
+
+    padding:0 24px;
+
+    display:flex;
+    justify-content:center;
+
+    text-align:center;
+
+    font-size:12px;
+    line-height:1.7;
+
+    color:var(--footer);
+
+    opacity:0;
+
+    animation:
+        fadeUp 1s ease .7s forwards;
+
+    transition:
+        opacity .5s ease,
+        transform .5s ease;
+}
+
+.footer-content{
+    width:min(900px,100%);
+}
+
+.footer p{
+    margin:0;
+}
+
+.footer.hidden{
+    opacity:0;
+    transform:translateY(20px);
+}
+
+/* =========================
+   LOADER
+========================= */
+
+.loader-screen{
+    position:fixed;
+    inset:0;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background:
+        rgba(255,255,255,.92);
+
+    backdrop-filter:blur(14px);
+
+    z-index:9999;
+}
+
+.loader-screen.show{
+    display:flex;
+}
+
+.spinner{
+    width:68px;
+    height:68px;
+
+    border-radius:50%;
+
+    border:
+        4px solid rgba(0,102,190,.12);
+
+    border-top:
+        4px solid var(--amex-blue);
+
+    animation:
+        spin .9s linear infinite;
+}
+
+.loader-text{
+    margin-top:22px;
+
+    color:var(--amex-blue);
+
+    font-weight:600;
+    font-size:15px;
+}
+
+/* =========================
+   VIEWER
+========================= */
+
+.viewer-page{
+    width:100%;
+    height:100vh;
+
+    display:none;
+    padding:22px;
+
+    opacity:0;
+}
+
+.viewer-page.show{
+    display:block;
+    animation:
+        fadeUp .7s ease forwards;
+}
+
+.viewer-shell{
+    width:100%;
+    height:100%;
+
+    background:white;
+
+    border-radius:30px;
+    overflow:hidden;
+
+    border:1px solid var(--border);
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.04),
+        0 20px 60px rgba(0,102,190,.08);
+}
+
+.viewer-header{
+    height:76px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    border-bottom:1px solid #E8EEF5;
+}
+
+.back-btn{
+    border:none;
+    background:none;
+
+    cursor:pointer;
+
+    color:var(--amex-blue);
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+.back-btn:hover{
+    opacity:.8;
+    transform:translateX(-2px);
+}
+
+.viewer-title{
+    font-size:15px;
+    font-weight:600;
+
+    color:var(--amex-blue);
+}
+
+.excel-wrapper{
+    height:calc(100% - 76px);
+
+    overflow:hidden;
+    position:relative;
+}
+
+.excel-frame{
+    width:100%;
+
+    height:calc(100% + 57px);
+
+    border:none;
+
+    margin-bottom:-57px;
+
+    opacity:0;
+
+    animation:
+        fadeUp .9s ease .1s forwards;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .hero-screen{
+        padding:26px;
+    }
+
+    .dashboard-btn{
+        padding:22px;
+        border-radius:24px;
+        width:100%;
+    }
+
+    .viewer-page{
+        padding:14px;
+    }
+
+    .viewer-shell{
+        border-radius:24px;
+    }
+
+    .viewer-header{
+        padding:0 18px;
+    }
+
+    .footer{
+        font-size:11px;
+        line-height:1.6;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section id="heroScreen" class="hero-screen">
+
+    <div class="hero">
+
+        <h1>GFCSU</h1>
+        <h1>Screening Scorecard</h1>
+
+        <p>
+            Select a dashboard to continue:
+        </p>
+
+        <div class="button-group">
+
+            <button
+                class="dashboard-btn"
+                onclick="openSheet('ytd')">
+
+                YTD Scorecard
+
+            </button>
+
+            <button
+                class="dashboard-btn"
+                onclick="openSheet('weekly')">
+
+                Weekly UPH
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <footer id="footer" class="footer">
+
+        <div class="footer-content">
+
+            <p>
+                This tool is exclusively designed and intended for internal use at American Express®.
+            </p>
+
+            <p>
+                Project Leader: Martha Bárcenas. |
+                Software Engineer and UI/UX Designer:
+                Esmeralda Monroy.
+            </p>
+
+            <p>
+                Special thanks to: Esteban Reyes.
+            </p>
+
+            <p>
+                2026 GFCSU | American Express México®.
+            </p>
+
+        </div>
+
+    </footer>
+
+</section>
+
+<section id="loaderScreen" class="loader-screen">
+
+    <div class="spinner"></div>
+
+    <div class="loader-text">
+        Loading dashboard...
+    </div>
+
+</section>
+
+<section id="viewerPage" class="viewer-page">
+
+    <div class="viewer-shell">
+
+        <div class="viewer-header">
+
+            <button
+                class="back-btn"
+                onclick="goBack()">
+
+                ← Back
+
+            </button>
+
+            <span
+                id="viewerTitle"
+                class="viewer-title">
+            </span>
+
+        </div>
+
+        <div
+            id="excelMount"
+            class="excel-wrapper">
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+const urls = {
+
+    ytd:
+    "https://1drv.ms/x/c/9c6f093978b6ceb0/IQTT2O82gvurTKxe-rJ0gS1UAUBPlNt60SBkHcVZ4-oPF5c?ActiveCell='Hoja1'!A1&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0",
+
+    weekly:
+    "https://1drv.ms/x/c/9c6f093978b6ceb0/IQTT2O82gvurTKxe-rJ0gS1UAUBPlNt60SBkHcVZ4-oPF5c?ActiveCell='Semana%202'!A1&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True&wdInConfigurator=True&edaebf=rslc0"
+};
+
+function mountExcel(src){
+
+    const mount =
+        document.getElementById("excelMount");
+
+    mount.innerHTML = "";
+
+    const iframe =
+        document.createElement("iframe");
+
+    iframe.className =
+        "excel-frame";
+
+    iframe.frameBorder = "0";
+    iframe.scrolling = "no";
+
+    iframe.src =
+        src + "&ts=" + Date.now();
+
+    mount.appendChild(iframe);
+}
+
+function openSheet(type){
+
+    const hero =
+        document.getElementById("heroScreen");
+
+    const loader =
+        document.getElementById("loaderScreen");
+
+    const viewer =
+        document.getElementById("viewerPage");
+
+    const footer =
+        document.getElementById("footer");
+
+    footer.classList.add("hidden");
+
+    hero.style.animation =
+        "fadeOut .45s ease forwards";
+
+    setTimeout(() => {
+
+        hero.style.display =
+            "none";
+
+        loader.classList.add(
+            "show"
+        );
+
+    },400);
+
+    setTimeout(() => {
+
+        loader.classList.remove(
+            "show"
+        );
+
+        viewer.style.display =
+            "block";
+
+        viewer.classList.add(
+            "show"
+        );
+
+        mountExcel(urls[type]);
+
+        document.getElementById(
+            "viewerTitle"
+        ).innerText =
+            type === "ytd"
+            ? "YTD Scorecard"
+            : "Weekly UPH";
+
+    },2400);
+}
+
+function goBack(){
+
+    const hero =
+        document.getElementById("heroScreen");
+
+    const viewer =
+        document.getElementById("viewerPage");
+
+    const footer =
+        document.getElementById("footer");
+
+    viewer.classList.remove(
+        "show"
+    );
+
+    setTimeout(() => {
+
+        viewer.style.display =
+            "none";
+
+        document.getElementById(
+            "excelMount"
+        ).innerHTML = "";
+
+        hero.style.display =
+            "flex";
+
+        hero.style.animation =
+            "fadeUp .7s ease";
+
+        footer.classList.remove(
+            "hidden"
+        );
+
+    },250);
+}
+</script>
+
+</body>
+</html>
